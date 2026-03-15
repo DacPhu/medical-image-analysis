@@ -1,0 +1,54 @@
+\section{Experimental Setup}
+\label{sec:experiments}
+
+\subsection{Datasets}
+
+\begin{table}[t]
+\centering
+\caption{Dataset summary.}
+\label{tab:datasets}
+\begin{tabular}{lcccc}
+\toprule
+Dataset & Modality & Classes & Train & Test \\
+\midrule
+ACDC~\cite{bernard2018acdc}    & Cardiac MRI   & 3 (RV, Myo, LV) & -- & -- \\
+BUSI~\cite{al2020busi}         & Breast US     & 1 (tumour)      & -- & -- \\
+FUGC~\cite{fugc2025}           & Colonoscopy   & 2 (polyp, edge) & -- & -- \\
+TN3K~\cite{gong2021tn3k}       & Thyroid US    & 1 (nodule)      & -- & -- \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Implementation Details}
+
+\paragraph{Architecture.}
+All experiments use a 2-D UNet with channel progression
+$[32, 64, 128, 256, 512]$, plain convolutional blocks, batch normalisation,
+and dropout ($p=0.1$).
+
+\paragraph{Optimisation.}
+Adam optimiser ($\beta_1=0.9$, $\beta_2=0.999$, weight decay $5\times10^{-4}$),
+learning rate $\eta=10^{-3}$ with polynomial decay (exponent 0.9) over
+$\tau = 200$ local iterations.
+Gradient clipping at norm 10.
+
+\paragraph{FL setup.}
+$K=5$ clients, $R=10$ communication rounds, $\tau=200$ local iterations per
+client per round.
+Client participation fraction $C=1.0$ (all clients selected each round).
+Three independent runs (seeds 1337, 1338, 1339); results reported as mean.
+
+\paragraph{FedAL setup.}
+Initial labelled set $L_0 = 10$ samples per client;
+budget $B = 5$ samples queried per round per client;
+entropy-based query strategy.
+
+\paragraph{Augmentation.}
+ACDC/TN3K: random rotation 90°, mirroring, affine deformation.
+BUSI/FUGC: affine (scale $[0.7,1.4]$, degrees $\pm15°$), Gaussian
+noise/blur, brightness/contrast jitter, low-resolution simulation, gamma.
+
+\paragraph{Evaluation.}
+Dice Similarity Coefficient (DSC, \%, higher is better) and
+95th-percentile Hausdorff Distance (HD$_{95}$, mm, lower is better)
+computed on the official validation/test splits.

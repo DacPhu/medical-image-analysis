@@ -1,0 +1,48 @@
+\section{Related Work}
+\label{sec:related}
+
+\subsection{Federated Learning Algorithms}
+
+The canonical FedAvg algorithm~\cite{mcmahan2017fedavg} aggregates client
+models as a weighted average proportional to local dataset size, but suffers
+from \emph{client drift} under non-IID data distributions.
+FedProx~\cite{li2020fedprox} adds a proximal regularisation term
+$\frac{\mu}{2}\|\mathbf{w}-\mathbf{w}^r\|^2$ that anchors local updates to
+the global model, improving convergence under heterogeneity.
+FedNova~\cite{wang2020fednova} identifies \emph{objective inconsistency} as
+a root cause of client drift and corrects it by normalising each client's
+pseudo-gradient by the number of local steps before aggregation.
+FedPer~\cite{arivazhagan2019fedper} takes a personalisation perspective:
+only the lower network layers (encoder) are aggregated globally, while the
+task-specific decoder is kept local, allowing clients to specialise without
+sacrificing a shared representation.
+
+\subsection{Federated Learning for Medical Image Analysis}
+
+Sheller \emph{et al.}~\cite{sheller2018federated} demonstrated that FL
+models for brain tumour segmentation (BraTS) approach centralised accuracy
+while preserving data locality.
+NVIDIA FLARE~\cite{nvidia2019clara} provides an open-source infrastructure
+for FL in healthcare.
+Bercea \emph{et al.}~\cite{bercea2022federated} studied the effect of
+non-IID distributions in abdominal CT segmentation and showed that
+aggregation strategy selection is critical.
+Our work extends these studies by (i) covering a broader set of modalities
+and tasks, (ii) comparing four aggregation algorithms with controlled
+Dirichlet heterogeneity, and (iii) integrating active learning to address
+annotation scarcity.
+
+\subsection{Active Learning for Segmentation}
+
+Active learning~\cite{settles2009active} aims to maximise model accuracy
+subject to a labelling budget by selecting the most informative unlabelled
+samples.
+Entropy-based methods~\cite{settles2009active} query samples with the
+highest predictive uncertainty.
+BADGE~\cite{ash2020badge} uses gradient embeddings to select a
+diverse and uncertain batch.
+Coreset~\cite{sener2018coreset} selects samples that minimise the maximum
+distance to the existing labelled set in feature space.
+Prior work on FL with active learning is sparse; our \textbf{FedAL}
+protocol is the first to integrate entropy-based querying directly into the
+FL communication rounds for medical image segmentation.

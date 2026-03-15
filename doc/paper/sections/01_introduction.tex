@@ -1,0 +1,51 @@
+\section{Introduction}
+\label{sec:introduction}
+
+Automated medical image segmentation is a cornerstone of modern
+computer-aided diagnosis, enabling precise delineation of anatomical
+structures and pathological regions in MRI, CT, and ultrasound scans.
+Deep learning approaches---particularly fully-convolutional
+UNet-style architectures~\cite{ronneberger2015unet}---have achieved
+near-radiologist accuracy on a growing number of benchmarks.
+Yet their clinical deployment remains constrained by a fundamental
+tension: state-of-the-art models are data-hungry, whereas patient data
+are sensitive and subject to strict privacy legislation (e.g.,
+GDPR, HIPAA).
+
+\paragraph{The federated learning promise.}
+McMahan \emph{et al.}~\cite{mcmahan2017fedavg} proposed \emph{Federated
+Learning} (FL) as a paradigm shift: rather than aggregating raw images on a
+central server, model gradients (or weights) are communicated, keeping
+patient data on-premise.
+FL has since attracted significant interest for medical imaging
+applications~\cite{sheller2018federated,nvidia2019clara,bercea2022federated},
+but two important challenges remain largely unresolved:
+
+\begin{enumerate}
+  \item \textbf{Statistical heterogeneity.}
+    Clinical data across institutions follow non-identical distributions
+    (non-IID), caused by scanner variability, patient demographics, and
+    annotation protocols.
+    Standard FedAvg degrades substantially under high heterogeneity.
+  \item \textbf{Annotation scarcity.}
+    Pixel-level segmentation masks require expert radiologists and are
+    expensive to obtain.
+    In FL settings each client can only annotate its own local pool,
+    amplifying the labelling bottleneck.
+\end{enumerate}
+
+\paragraph{Contributions.}
+We address both challenges with the following contributions:
+\begin{itemize}
+  \item A unified FL framework for 2-D medical image segmentation
+    supporting four aggregation algorithms: FedAvg~\cite{mcmahan2017fedavg},
+    FedProx~\cite{li2020fedprox}, FedNova~\cite{wang2020fednova}, and
+    FedPer~\cite{arivazhagan2019fedper}.
+  \item Systematic evaluation under Dirichlet non-IID partitioning on four
+    clinically diverse datasets: ACDC, BUSI, FUGC, and TN3K.
+  \item \textbf{FedAL}: a federated active-learning protocol that integrates
+    entropy-based query selection into the FL communication rounds, reducing
+    labelling cost while maintaining competitive segmentation performance.
+  \item A 1\textsuperscript{st}-place result on the FUGC 2025 challenge,
+    demonstrating the practical effectiveness of the proposed framework.
+\end{itemize}

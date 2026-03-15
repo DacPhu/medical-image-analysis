@@ -1,0 +1,126 @@
+\section{Methodology}
+\label{sec:method}
+
+\subsection{Problem Formulation}
+
+Let $\mathcal{K} = \{1,\ldots,K\}$ be the set of $K$ clients.
+Each client $k$ holds a private dataset
+$\mathcal{D}_k = \{(\mathbf{x}_i,\mathbf{y}_i)\}_{i=1}^{n_k}$
+of 2-D medical images and corresponding segmentation masks.
+The global objective is to minimise
+
+\begin{equation}
+  F(\mathbf{w}) = \sum_{k=1}^{K} \frac{n_k}{n}\, F_k(\mathbf{w}),
+  \quad n = \textstyle\sum_k n_k,
+  \label{eq:global_obj}
+\end{equation}
+
+where $F_k(\mathbf{w}) = \frac{1}{n_k}\sum_{(\mathbf{x},\mathbf{y})\in\mathcal{D}_k}\ell(\mathbf{w};\mathbf{x},\mathbf{y})$
+is the local empirical loss of client $k$ parameterised by the shared
+global model $\mathbf{w}$.
+
+\subsection{Data Heterogeneity via Dirichlet Partitioning}
+
+To simulate realistic non-IID conditions, we partition the training data
+using a Dirichlet distribution~\cite{hsu2019federated}.
+For each class $c$, client proportions are drawn as
+\begin{equation}
+  \mathbf{p}_{k,c} \sim \operatorname{Dir}(\alpha),
+  \label{eq:dirichlet}
+\end{equation}
+where $\alpha > 0$ controls heterogeneity: smaller $\alpha$ yields more
+skewed distributions.
+We evaluate $\alpha \in \{0.1,\, 0.5,\, 1.0\}$ alongside an IID baseline.
+
+\subsection{Aggregation Algorithms}
+
+\paragraph{FedAvg~\cite{mcmahan2017fedavg}.}
+After each client $k$ runs $\tau$ local SGD steps starting from the global
+model $\mathbf{w}^{(r)}$, the server aggregates:
+\begin{equation}
+  \mathbf{w}^{(r+1)} = \sum_{k=1}^{K} \frac{n_k}{n}\,\mathbf{w}_k^{(r)}.
+  \label{eq:fedavg}
+\end{equation}
+
+\paragraph{FedProx~\cite{li2020fedprox}.}
+Each client minimises a proximal objective:
+\begin{equation}
+  \mathbf{w}_k^{(r)} = \arg\min_{\mathbf{w}}
+  \left[ F_k(\mathbf{w}) + \frac{\mu}{2}\|\mathbf{w} - \mathbf{w}^{(r)}\|^2 \right],
+  \label{eq:fedprox}
+\end{equation}
+with aggregation identical to FedAvg \eqref{eq:fedavg}.
+
+\paragraph{FedNova~\cite{wang2020fednova}.}
+FedNova corrects objective inconsistency by normalising each client's
+pseudo-gradient $\mathbf{d}_k = \mathbf{w}^{(r)} - \mathbf{w}_k^{(r)}$ by
+its effective local step count $\tau_k$:
+\begin{align}
+  \tau_{\text{eff}} &= \sum_{k=1}^{K} \frac{n_k}{n}\,\tau_k, \\
+  a_k &= \frac{\tau_k}{\tau_{\text{eff}}},  \\
+  \mathbf{w}^{(r+1)} &= \mathbf{w}^{(r)}
+    - \sum_{k=1}^{K} \frac{n_k}{n}\,a_k\,\mathbf{d}_k.
+  \label{eq:fednova}
+\end{align}
+
+\paragraph{FedPer~\cite{arivazhagan2019fedper}.}
+The model parameters are partitioned into shared encoder weights
+$\boldsymbol{\theta}_{\text{enc}}$ and personalised decoder weights
+$\boldsymbol{\theta}_{k,\text{dec}}$.
+Only the encoder is aggregated:
+\begin{equation}
+  \boldsymbol{\theta}_{\text{enc}}^{(r+1)} =
+    \sum_{k=1}^{K} \frac{n_k}{n}\,\boldsymbol{\theta}_{k,\text{enc}}^{(r)},
+  \quad
+  \boldsymbol{\theta}_{k,\text{dec}} \text{ kept local.}
+  \label{eq:fedper}
+\end{equation}
+
+\subsection{Segmentation Loss}
+
+All methods share a compound Dice$+$CE loss:
+\begin{equation}
+  \mathcal{L} = \lambda_{\text{Dice}}\,\mathcal{L}_{\text{Dice}}
+              + \lambda_{\text{CE}}\,\mathcal{L}_{\text{CE}},
+  \label{eq:loss}
+\end{equation}
+with $\lambda_{\text{Dice}} = \lambda_{\text{CE}} = 1.0$.
+The Dice loss is computed per class with a smoothing constant $\varepsilon=10^{-5}$.
+
+\subsection{FedAL: Federated Active Learning}
+
+\begin{algorithm}[t]
+\caption{FedAL — Federated Active Learning}
+\label{alg:fedal}
+\begin{algorithmic}[1]
+\Require Global model $\mathbf{w}^{(0)}$, clients $\mathcal{K}$, rounds $R$,
+  budget $B$, initial labelled size $L_0$, AL strategy $\mathcal{A}$
+\For{$r = 0, 1, \ldots, R-1$}
+  \State Server broadcasts $\mathbf{w}^{(r)}$ to selected clients
+  \For{each client $k \in \mathcal{K}$ \textbf{in parallel}}
+    \State \textbf{Query:} $\mathcal{S}_k \leftarrow
+      \mathcal{A}(\mathbf{w}^{(r)}, \mathcal{U}_k, B)$
+      \Comment{entropy scoring}
+    \State $\mathcal{L}_k \leftarrow \mathcal{L}_k \cup \mathcal{S}_k$;
+      $\mathcal{U}_k \leftarrow \mathcal{U}_k \setminus \mathcal{S}_k$
+    \State \textbf{Train:} $\mathbf{w}_k^{(r)}
+      \leftarrow \textsc{LocalSGD}(\mathbf{w}^{(r)}, \mathcal{L}_k, \tau)$
+    \State Send $\mathbf{w}_k^{(r)}$ to server
+  \EndFor
+  \State $\mathbf{w}^{(r+1)} \leftarrow \textsc{Aggregate}(\{\mathbf{w}_k^{(r)}\},\{n_k\})$
+\EndFor
+\end{algorithmic}
+\end{algorithm}
+
+Each client $k$ maintains a labelled set $\mathcal{L}_k$ and an unlabelled
+pool $\mathcal{U}_k$.
+At the start of each round, the current global model scores each sample
+$\mathbf{x} \in \mathcal{U}_k$ by predictive entropy:
+\begin{equation}
+  H(\mathbf{x}) = -\sum_c p_c(\mathbf{x})\log p_c(\mathbf{x}),
+  \label{eq:entropy}
+\end{equation}
+and the $B$ highest-entropy samples are moved to $\mathcal{L}_k$ for local
+training.
+This approach is aggregation-agnostic: FedAL can be combined with any of
+the four algorithms above.

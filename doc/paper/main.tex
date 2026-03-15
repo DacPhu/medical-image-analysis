@@ -1,0 +1,66 @@
+% MICCAI 2025 — LNCS style
+% Compile: pdflatex main.tex && bibtex main && pdflatex main.tex && pdflatex main.tex
+
+\documentclass[runningheads]{llncs}
+
+% -------------------------------------------------------------------------
+% Packages
+% -------------------------------------------------------------------------
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage{multirow}
+
+% Fix for \cmidrule in booktabs + tabular
+\usepackage{booktabs}
+
+% -------------------------------------------------------------------------
+% Metadata
+% -------------------------------------------------------------------------
+\title{Privacy-Preserving Medical Image Segmentation\\
+       via Federated Learning under Data Heterogeneity}
+
+\author{
+  Nam Khanh Tran\inst{1} \and
+  Dac-Phu Phan Le\inst{1}
+}
+
+\authorrunning{N.\,K. Tran and D.-P. Phan Le}
+
+\institute{
+  Faculty of Information Technology,
+  University of Science, VNU-HCM, Vietnam\\
+  \email{\{21120015, 21120111\}@student.hcmus.edu.vn}
+}
+
+% -------------------------------------------------------------------------
+\begin{document}
+% -------------------------------------------------------------------------
+
+\maketitle
+
+\input{sections/00_abstract}
+
+\input{sections/01_introduction}
+
+\input{sections/02_related_work}
+
+\input{sections/03_methodology}
+
+\input{sections/04_experiments}
+
+\input{sections/05_results}
+
+\input{sections/06_conclusion}
+
+% -------------------------------------------------------------------------
+\bibliographystyle{splncs04}
+\bibliography{references}
+% -------------------------------------------------------------------------
+
+\end{document}

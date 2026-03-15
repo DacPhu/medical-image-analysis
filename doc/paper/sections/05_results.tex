@@ -1,0 +1,111 @@
+\section{Results}
+\label{sec:results}
+
+% -------------------------------------------------------------------------
+% ACDC
+% -------------------------------------------------------------------------
+\begin{table}[t]
+\centering
+\caption{Results on ACDC (3-class cardiac MRI). DSC (\%) $\uparrow$, HD (mm) $\downarrow$.}
+\label{tab:acdc}
+\begin{tabular}{lcccccccc}
+\toprule
+& \multicolumn{2}{c}{IID} & \multicolumn{2}{c}{$\alpha=1.0$}
+& \multicolumn{2}{c}{$\alpha=0.5$} & \multicolumn{2}{c}{$\alpha=0.1$} \\
+\cmidrule(lr){2-3}\cmidrule(lr){4-5}\cmidrule(lr){6-7}\cmidrule(lr){8-9}
+Method & DSC & HD & DSC & HD & DSC & HD & DSC & HD \\
+\midrule
+Centralized   & --   & --   & --   & --   & --   & --   & --   & -- \\
+\midrule
+FedAvg        & --   & --   & --   & --   & --   & --   & --   & -- \\
+FedProx       & --   & --   & --   & --   & --   & --   & --   & -- \\
+FedNova       & --   & --   & --   & --   & --   & --   & --   & -- \\
+FedPer        & --   & --   & --   & --   & --   & --   & --   & -- \\
+\midrule
+FedAL (ours)  & --   & --   & --   & --   & --   & --   & --   & -- \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% -------------------------------------------------------------------------
+% BUSI
+% -------------------------------------------------------------------------
+\begin{table}[t]
+\centering
+\caption{Results on BUSI (breast ultrasound tumour segmentation).}
+\label{tab:busi}
+\begin{tabular}{lcccc}
+\toprule
+& \multicolumn{2}{c}{IID} & \multicolumn{2}{c}{$\alpha=0.1$} \\
+\cmidrule(lr){2-3}\cmidrule(lr){4-5}
+Method & DSC & HD & DSC & HD \\
+\midrule
+Centralized   & --   & --   & --   & -- \\
+\midrule
+FedAvg        & --   & --   & --   & -- \\
+FedProx       & --   & --   & --   & -- \\
+FedNova       & --   & --   & --   & -- \\
+FedPer        & --   & --   & --   & -- \\
+\midrule
+FedAL (ours)  & --   & --   & --   & -- \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% -------------------------------------------------------------------------
+% FUGC
+% -------------------------------------------------------------------------
+\begin{table}[t]
+\centering
+\caption{Results on FUGC (gastrointestinal polyp segmentation).}
+\label{tab:fugc}
+\begin{tabular}{lcccc}
+\toprule
+& \multicolumn{2}{c}{IID} & \multicolumn{2}{c}{$\alpha=0.1$} \\
+\cmidrule(lr){2-3}\cmidrule(lr){4-5}
+Method & DSC & HD & DSC & HD \\
+\midrule
+Centralized   & --   & --   & --   & -- \\
+\midrule
+FedAvg        & --   & --   & --   & -- \\
+FedProx       & --   & --   & --   & -- \\
+FedNova       & --   & --   & --   & -- \\
+FedPer        & --   & --   & --   & -- \\
+\midrule
+FedAL (ours)  & --   & --   & --   & -- \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% -------------------------------------------------------------------------
+% TN3K
+% -------------------------------------------------------------------------
+\begin{table}[t]
+\centering
+\caption{Results on TN3K (thyroid nodule segmentation).}
+\label{tab:tn3k}
+\begin{tabular}{lcccc}
+\toprule
+& \multicolumn{2}{c}{IID} & \multicolumn{2}{c}{$\alpha=0.1$} \\
+\cmidrule(lr){2-3}\cmidrule(lr){4-5}
+Method & DSC & HD & DSC & HD \\
+\midrule
+Centralized   & --   & --   & --   & -- \\
+\midrule
+FedAvg        & --   & --   & --   & -- \\
+FedProx       & --   & --   & --   & -- \\
+FedNova       & --   & --   & --   & -- \\
+FedPer        & --   & --   & --   & -- \\
+\midrule
+FedAL (ours)  & --   & --   & --   & -- \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Discussion.}
+% TODO: fill in after experiments complete.
+% Suggested discussion points:
+%   - FedNova vs FedAvg gain under alpha=0.1
+%   - FedPer personalisation benefit on BUSI/TN3K (single-class US)
+%   - FedAL labelling efficiency: DSC at 20% budget vs full supervision
+%   - FUGC 1st-place result: which configuration won?

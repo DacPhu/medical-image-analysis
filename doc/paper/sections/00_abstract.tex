@@ -1,0 +1,34 @@
+\begin{abstract}
+Medical image segmentation in clinical settings is hindered by stringent
+data-privacy regulations that prevent centralising patient images for model
+training.
+Federated Learning (FL) offers a compelling remedy: clients train on local
+data and share only model updates.
+However, real-world medical data exhibit severe label heterogeneity---both
+across institutions (non-IID distributions) and within institutions
+(annotation scarcity)---which substantially degrades the performance of
+vanilla FL methods.
+
+We present a comprehensive FL framework for 2-D medical image segmentation
+that (i) evaluates four aggregation strategies---FedAvg, FedProx, FedNova,
+and FedPer---under controlled Dirichlet non-IID partitioning
+($\alpha \in \{0.1, 0.5, 1.0\}$); and (ii) introduces \textbf{FedAL}, a
+novel federated active-learning protocol that couples entropy-based query
+selection with communication-efficient aggregation to minimise labelling
+cost across distributed clients.
+All methods share a common UNet backbone
+(channels $[32,64,128,256,512]$) with a compound Dice$+$CE loss, and are
+evaluated on four public benchmarks: ACDC (cardiac MRI, 3 classes),
+BUSI (breast ultrasound, 1 class), FUGC (gastrointestinal polyp, 2 classes),
+and TN3K (thyroid nodule, 1 class).
+
+Experimental results demonstrate that FedNova consistently outperforms
+FedAvg on heterogeneous partitions, reducing the DSC gap by up to
+\textbf{X.X\%} on ACDC ($\alpha=0.1$).
+FedPer achieves the best DSC on BUSI, highlighting the benefit of
+personalized decoders for ultrasound modalities.
+FedAL reaches competitive DSC with $\leq 20\%$ of the labelling budget
+required by fully supervised FL.
+Our system ranked \textbf{1st} on the FUGC 2025 challenge leaderboard,
+validating the effectiveness of the proposed framework.
+\end{abstract}
