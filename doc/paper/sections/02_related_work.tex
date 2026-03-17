@@ -16,6 +16,11 @@ FedPer~\cite{arivazhagan2019fedper} takes a personalisation perspective:
 only the lower network layers (encoder) are aggregated globally, while the
 task-specific decoder is kept local, allowing clients to specialise without
 sacrificing a shared representation.
+Recent aggregation improvements include evidential weight aggregation
+(FedEvi~\cite{chen2024fedevi}), which uses Dirichlet-based uncertainty
+models to adaptively weight client contributions; and client-contribution
+normalisation~\cite{linardos2024fets}, which generalises the FedNova
+principle and consistently improves convergence across heterogeneity levels.
 
 \subsection{Federated Learning for Medical Image Analysis}
 
@@ -31,6 +36,35 @@ Our work extends these studies by (i) covering a broader set of modalities
 and tasks, (ii) comparing four aggregation algorithms with controlled
 Dirichlet heterogeneity, and (iii) integrating active learning to address
 annotation scarcity.
+More recent work has extended FL to foundation-model architectures:
+Liu \emph{et al.}~\cite{liu2024fedfms} federate fine-tuning of SAM for
+medical segmentation, while Skorupko \emph{et al.}~\cite{skorupko2025fednnunet}
+extend nnU-Net with federated fingerprint extraction.
+Schutte \emph{et al.}~\cite{schutte2024fedgs} address content heterogeneity
+via gradient scaling, and Xiang \emph{et al.}~\cite{xiang2024fedia} handle
+annotation incompleteness across clients.
+The FeTS 2024 challenge~\cite{linardos2024fets} benchmarks six aggregators
+on glioma segmentation, confirming that no single method dominates across
+all heterogeneity levels --- motivating the comparative study in this paper.
+
+\subsection{Task-Specific Federated Learning for Ultrasound and Endoscopy}
+
+FL has also been specialised for specific imaging tasks.
+For thyroid nodule segmentation in ultrasound, Xiang \emph{et al.}~\cite{xiang2025maunet}
+propose a multi-attention UNet federated across multiple ultrasound centres,
+achieving SOTA accuracy while preserving data privacy --- directly
+complementary to our TN3K experiments.
+For polyp segmentation, Pan \emph{et al.}~\cite{pan2025fdgpolyp} apply
+Fourier-domain augmentation within FL to improve cross-domain generalisation,
+and Tan \emph{et al.}~\cite{tan2025fedsemidg} combine self-supervised
+pretraining with adversarial augmentation to reduce label requirements in a
+federated setting --- tasks closely related to our FUGC benchmark.
+Chen \emph{et al.}~\cite{chen2025pcrfed} demonstrate that contrastive
+representation regularisation improves personalised FL for segmentation
+across non-IID clients.
+In the cardiovascular domain, FedCVD~\cite{zhang2024fedcvd} presents the
+first real-world FL benchmark on echocardiogram segmentation, revealing
+challenges unique to natural (non-simulated) data heterogeneity.
 
 \subsection{Active Learning for Segmentation}
 
@@ -43,6 +77,10 @@ BADGE~\cite{ash2020badge} uses gradient embeddings to select a
 diverse and uncertain batch.
 Coreset~\cite{sener2018coreset} selects samples that minimise the maximum
 distance to the existing labelled set in feature space.
-Prior work on FL with active learning is sparse; our \textbf{FedAL}
-protocol is the first to integrate entropy-based querying directly into the
-FL communication rounds for medical image segmentation.
+The concurrent work most closely related to FedAL is FEAL~\cite{chen2024feal}
+(CVPR 2024), which proposes \emph{federated evidential active learning}
+using Dirichlet-based epistemic uncertainty to select samples under domain
+shift across clients.
+Unlike FEAL, our FedAL uses lightweight entropy scoring and is
+aggregation-agnostic, making it directly composable with FedAvg, FedProx,
+FedNova, and FedPer.

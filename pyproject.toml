@@ -13,7 +13,7 @@ readme = "README.md"
 license = {file = "LICENSE"}
 keywords = []
 classifiers = []
-requires-python = ">=3.10"
+requires-python = ">=3.12"
 dependencies = [
     "torch",
     "torchvision",

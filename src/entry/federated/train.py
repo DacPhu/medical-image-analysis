@@ -23,7 +23,7 @@ def parse_args():
     parser.add_argument("--dropout-prob", default=0.1, type=float)
     parser.add_argument("--deep-supervision", action="store_true")
     parser.add_argument("--ds-layer", default=3, type=int)
-    parser.add_argument("--image-size", default=256, nargs="+", type=int)
+    parser.add_argument("--image-size", default=[256], nargs="+", type=int)
     parser.add_argument("--model-ckpt", default=None, type=str)
     # <<< Model parameters
 

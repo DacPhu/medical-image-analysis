@@ -767,7 +767,7 @@ class FLTrainer(BaseTrainer):
         ]
 
         # Save partition info
-        partition_info = {str(i): idxs for i, idxs in enumerate(client_indices)}
+        partition_info = {str(i): [int(x) for x in idxs] for i, idxs in enumerate(client_indices)}
         partition_path = self.work_path / "client_partition.json"
         with open(partition_path, "w") as f:
             json.dump(partition_info, f, indent=2)

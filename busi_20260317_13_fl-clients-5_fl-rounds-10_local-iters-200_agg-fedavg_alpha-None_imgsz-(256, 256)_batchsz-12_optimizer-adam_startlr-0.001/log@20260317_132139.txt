@@ -1,0 +1,11 @@
+INFO <2026-03-17 13:21:39,352>: Partitioning data across clients …
+INFO <2026-03-17 13:21:39,355>: IID partition: uniform random split
+INFO <2026-03-17 13:21:39,356>: Client data sizes: [91, 91, 90, 90, 90]
+INFO <2026-03-17 13:21:39,356>:   Client 0: 10 labeled, 81 pool
+INFO <2026-03-17 13:21:39,356>:   Client 1: 10 labeled, 81 pool
+INFO <2026-03-17 13:21:39,356>:   Client 2: 10 labeled, 80 pool
+INFO <2026-03-17 13:21:39,357>:   Client 3: 10 labeled, 80 pool
+INFO <2026-03-17 13:21:39,357>:   Client 4: 10 labeled, 80 pool
+INFO <2026-03-17 13:21:39,357>: FL Round 1/10 [FedAL/entropy]
+INFO <2026-03-17 13:21:39,357>:   Selected clients: [3, 4, 2, 1, 0]
+INFO <2026-03-17 13:21:47,181>:   Client 3: queried 5 → labeled=15, pool=75
